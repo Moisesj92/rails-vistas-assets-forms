@@ -1,6 +1,9 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Posts</h1>
+<div class="cover mb-4 p-4" >
+  <h1>Mi Blog Personal</h1>
+  <p>Arsenio Jimenez, Desarrolador Web</p>
+</div>
 
 <div id="posts">
   <% @posts.each do |post| %>
@@ -10,5 +13,9 @@
     </p>
   <% end %>
 </div>
+
+<%# <div> %>
+  <%# <%= render partials:"posts/card", collection: @posts, as: "post" %>
+<%# </div> %>
 
 <%= link_to "New post", new_post_path %>

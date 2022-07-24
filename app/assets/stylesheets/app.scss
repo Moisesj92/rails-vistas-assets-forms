@@ -1,1 +1,11 @@
 @import "bootstrap";
+
+.cover{
+  min-height: 350px;
+  color: white;
+  background-image: url(#{ asset_path('background.jpeg') });
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

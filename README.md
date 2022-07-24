@@ -31,7 +31,7 @@ con base en este conocimiento podemos intuir que en los layouts se renderizaran 
       <header>
         <nav>
           <%=link_to "Inicio", root_path%>
-          <%=link_to "Articulos", posts_path%>
+          <%=link_to "Artículos", posts_path%>
         </nav>
       </header>
       <main>
@@ -45,7 +45,7 @@ con base en este conocimiento podemos intuir que en los layouts se renderizaran 
 
 ```
 
-ademas de la yield en los layot podemos encontrar etiquetas como **csrf_meta_tags**, **csp_meta_tag**, **stylesheet_link_tag** (Sirve para insertar hojas
+ademas de la yield en los layout podemos encontrar etiquetas como **csrf_meta_tags**, **csp_meta_tag**, **stylesheet_link_tag** (Sirve para insertar hojas
 de estilo en el layout), **javascript_importmap_tags** (importa JS), cada una de las cuales posee su propia funcionalidad.
 
 ## Assset Pipeline
@@ -57,7 +57,7 @@ minificados, por defecto rails trae ya 2 manifiestos, uno para css y otro para j
 el asset pipeline modifica los archivos sacrificando su legibilidad para optimizar su rendimiento, esto lo logra quitando saltos de lineas, comentarios,
 cambiando nombres de variables, etc y por ultimo el asset pipeline firma el archivo con un código único (application-Aasdnsadkhkdh13ksa.js) para que el navegador pueda identificar si debe o no guardar el archivo en cache.
 
-Habilitar el uso de preprocesadores como SASS
+Habilitar el uso de pre - procesadores como SASS
 
 Integración con bundler permite que assest que vengan de otras gemas puedan ser integrados con tu proyecto (Bootstrap, TailwindCss)
 
@@ -72,8 +72,8 @@ importaremos bootstrap.
   @import "bootstrap";
   
 ```
-en el manifiesto como recomendacion no se aconseja importar todos los archivos que se encuentran en la carpeta stylesheets, para poder importar y poder
-tener un mejor manejo y comtrol de los archivos puedes sustituir la imporetacion completa de todos los archivos por importaciones individuales:
+en el manifiesto como recomendación no se aconseja importar todos los archivos que se encuentran en la carpeta stylesheets, para poder importar y poder
+tener un mejor manejo y control de los archivos puedes sustituir la importación completa de todos los archivos por importaciones individuales:
 
 ``` [css]
 
@@ -83,8 +83,61 @@ tener un mejor manejo y comtrol de los archivos puedes sustituir la imporetacion
   
 ```
 
-## Imagenes
+## Imágenes
+Existen diferentes helper para poder usar imágenes en los templates, **image_tag** **asset_path** entre otros y es la forma correcta de utilizar tus assets en tus views de rails, estos helpers insertan el codigo completo en tu template y se encargan de buscarla en las ubicaciones por defecto que son app/assets vendor o lib/assets, en caso de que decidas crear carpetas dentro de los paths de búsquedas puedes utilizar los helper de la siguiente manera:
 
-## Parciales y metodo render
+` <%= image_tag "caperta/imagen.png" %> `
 
-## Configuracion de layouts y manifiestos
+` <%= asset_path "caperta/imagen.png" %> `
+
+si quisieras usar archivos que no pasen por estos helper puedes guardarlos en tu carpeta public, pero no es recomendado hacer esto, estos helpers antes mencinados no solo pueden ser utilizadon en las visatas html si no que pueden ser usados tambien en los archivos css y js, por ejemplo:
+
+``` [css]
+
+  .cover {
+    background-image: url(<%= asset_path "caperta/imagen.png" %>);
+  }
+  
+```
+
+## Parciales y método render
+Los parciales son fragmentos de código reutilizables dentro de las templates, para usarlos se debe recurrir a un método render, este método nos permite incrustar un parcial dentro de un template, el path de búsqueda predeterminado es **/partials** y tienen como particularidad que el nombre del archivo siempre deberá iniciar con un (guion bajo) **_nombre.html.erb** 
+
+render puede ser usado con diferentes opciones para incrustar información adicional que puede ser utilizada dentro del parcial, también existe una opción collection que es recibida por el método render y que permite crear un parcial por cada uno de los objectos de la colección.
+
+
+``` [erb]
+
+  <div>
+    <%= render partials:"posts/card", collection: @posts, as: "post" %>
+  </div>
+
+```
+
+## Configuración de layouts y manifiestos
+existe la posibilidad de cambiar el layout para diferentes controladores de tu aplicación, esto con la finalidad de tener diferentes vistas para diferentes acciones, se puede realizar el cambio de layout desde cada accione del controlador con el comando render o se puede configurar todo el layout para un solo controlador con la palabra layout al inicio del mismo, ademas si no le pasas un string a esa configuración puedes definir un método de la siguiente manera que te permitirá agregar una lógica mas compleja para decidir que layout vas a mostrar:
+
+``` [ruby]
+
+  class homeController < ApplicationController
+    layout set_layout
+    def index
+      @posts = Post.all
+    end
+  end
+
+  def set_layout
+    if params[:action] == "index"
+      "home"
+    else
+      "application"
+    end
+  end
+
+```
+
+## active storage y action text
+
+
+
+
